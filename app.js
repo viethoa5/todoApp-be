@@ -3,11 +3,11 @@ const app = express();
 const bodyParser = require('body-parser');
 const route = require('./routers/route');
 
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
-
 require('dotenv').config()  
 const port = process.env.PORT || 8000;
+
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
 
 route(app)
 

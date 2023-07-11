@@ -20,10 +20,16 @@ class AuthController {
           process.env.REFRESH_SECRET,
           process.env.REFRESH_EXPIRED
         );
-        user.access_token = accessToken;
-        await user.save();
         res.cookie("refresh_Token", refreshToken, {
-          expires: new Date(Date.now() + parseInt(process.env.REFRESH_EXPIRED_DATE) * 60 * 1000),
+          expires: new Date(
+            Date.now() + parseInt(process.env.REFRESH_EXPIRED_DATE) * 60 * 1000
+          ),
+          httpOnly: true,
+        });
+        res.cookie("access_Token", accessToken, {
+          expires: new Date(
+            Date.now() + parseInt(process.env.REFRESH_EXPIRED_DATE) * 60 * 1000
+          ),
           httpOnly: true,
         });
         res.json({ access_token: accessToken, refresh_token: refreshToken });
@@ -34,6 +40,7 @@ class AuthController {
       res.status(500).json({ message: err.message });
     }
   }
+
   async register(req, res) {
     try {
       const newUser = await new User(req.body);
@@ -56,6 +63,40 @@ class AuthController {
       }
     } catch (err) {
       res.status(500).json({ message: err.message });
+    }
+  }
+
+  async refresh(req, res) {
+    try {
+      const authHeader = req.headers["authorization"];
+      if (authHeader.toString().startsWith("Bearer ")) {
+        const token = authHeader.substring(7, authHeader.length);
+        if (token == req.cookies.access_Token) {
+          const recoveryRefreshToken = await authMethod.verifyActiveToken(
+            req.cookies.refresh_Token,
+            process.env.REFRESH_SECRET
+          );
+          const new_AccessToken = await authMethod.generateToken(
+            recoveryRefreshToken.username,
+            recoveryRefreshToken.password,
+            process.env.ACCESS_SECRET,
+            process.env.ACCESS_EXPIRED
+          );
+          res.cookie("access_Token", new_AccessToken, {
+            expires: new Date(
+              Date.now() + parseInt(process.env.REFRESH_EXPIRED_DATE) * 60 * 1000
+            ),
+            httpOnly: true,
+          });
+          res.json({ access_token: new_AccessToken });
+        } else {
+          res.status(401).json({ message: "Unauthorized" });
+        }
+      } else {
+        res.status(401).json({ message: "Unauthorized" });
+      }
+    } catch (err) {
+      res.status(401).json({ message: err.message });
     }
   }
 }

@@ -5,10 +5,10 @@ const upload = multer();
 
 const taskController = require("../controllers/taskController");
 const authMiddleware = require("../middleware//authMiddleware");
-router.get("/", taskController.index);
-router.put("/:id", taskController.update);
-router.delete("/:id", taskController.delete);
-router.get("/:id", taskController.detail);
+router.get("/", authMiddleware.isAuthenticated, taskController.index);
+router.put("/:id",upload.none() ,authMiddleware.isAuthenticated, taskController.update);
+router.delete("/:id", authMiddleware.isAuthenticated, taskController.delete);
+router.get("/:id", authMiddleware.isAuthenticated, taskController.detail);
 router.post(
   "/create",
   upload.none(),

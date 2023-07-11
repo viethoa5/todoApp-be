@@ -6,7 +6,7 @@ exports.isAuthenticated = async function (req, res, next) {
     const authHeader = req.headers["authorization"];
     if (authHeader.toString().startsWith("Bearer ")) {
       const token = authHeader.substring(7, authHeader.length);
-      const verified = await authMethod.verifyAccessToken(
+      const verified = await authMethod.verifyActiveToken(
         token,
         process.env.ACCESS_SECRET
       );

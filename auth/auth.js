@@ -31,7 +31,7 @@ exports.verifyExpiredToken = async function (token, secretString) {
   }
 };
 
-exports.verifyAccessToken = async function (token, secretString) {
+exports.verifyActiveToken = async function (token, secretString) {
   try {
     return await jwt.verify(token, secretString);
   } catch (error) {

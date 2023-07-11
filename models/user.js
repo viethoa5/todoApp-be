@@ -24,23 +24,27 @@ const User = new Schema({
     type: String,
     required: [true, "Password required"],
   },
-  Access_Token: String,
+  access_token: String,
   createdAt: { type: Date, default: Date.now() },
   updatedAt: { type: Date, default: Date.now() },
 });
 
-User.pre("save", async function (next) {
-  var user = this;
-  // only hash the password if it has been modified (or is new)
-  if (!user.isModified("password")) return next();
-  try {
-    const salt = await bcrypt.genSalt(parseInt(process.env.SECRET_NUMBER));
-    const hash = await bcrypt.hash(user.password, salt);
-    user.password = hash;
-    return next();
-  } catch (error) {
-    next(error);
-  }
-});
+// User.pre('save', async function (next) {
+//   var user = this;
+//   // only hash the password if it has been modified (or is new)
+//   if (!user.isModified("password")) return next();
+//   try {
+//     const salt = await bcrypt.genSalt(parseInt(process.env.SECRET_NUMBER));
+//     const hash = await bcrypt.hash(user.password, salt);
+//     user.password = hash;
+//     return next();
+//   } catch (error) {
+//     return next(error);
+//   }
+// });
+
+User.methods.validatePassword = async function validatePassword (plainPassword) {
+  return bcrypt.compare(plainPassword, this.password);
+};
 
 module.exports = mongoose.model("user", User);

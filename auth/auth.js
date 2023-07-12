@@ -5,14 +5,14 @@ var User = require("../models/user");
 require("dotenv").config();
 
 exports.generateToken = async function (
-  username,
+  email,
   password,
   secretString,
   tokenLife
 ) {
   try {
     return await jwt.sign(
-      { username: username, password: password },
+      { email: email, password: password },
       secretString,
       { expiresIn: tokenLife }
     );
@@ -40,9 +40,9 @@ exports.verifyActiveToken = async function (token, secretString) {
   }
 };
 
-exports.validatePassword = async function (username, password) {
+exports.validatePassword = async function (email, password) {
   try {
-    const user = await User.findOne({ email: username });
+    const user = await User.findOne({ email: email });
     const isUser = await bcrypt.compare(password, user.password);
     return { isUser: isUser, user: user };
   } catch (error) {

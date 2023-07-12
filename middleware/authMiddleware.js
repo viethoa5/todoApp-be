@@ -14,7 +14,7 @@ exports.isAuthenticated = async function (req, res, next) {
         return res.status(403).json({ message: "Forbidden" });
       }
       const user = await User.findOne({
-        email: verified.username,
+        email: verified.email,
         password: verified.password,
       });
       req.user = user;

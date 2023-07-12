@@ -77,7 +77,7 @@ class AuthController {
             process.env.REFRESH_SECRET
           );
           const new_AccessToken = await authMethod.generateToken(
-            recoveryRefreshToken.username,
+            recoveryRefreshToken.email,
             recoveryRefreshToken.password,
             process.env.ACCESS_SECRET,
             process.env.ACCESS_EXPIRED

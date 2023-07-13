@@ -1,23 +1,32 @@
-const express = require('express')
+var cors = require("cors");
+const express = require("express");
 const app = express();
-const bodyParser = require('body-parser');
-var cookieParser = require('cookie-parser')
-const route = require('./routers/route');
+const bodyParser = require("body-parser");
+var cookieParser = require("cookie-parser");
+const route = require("./routers/route");
 
-require('dotenv').config()  
+require("dotenv").config();
 const port = process.env.PORT || 8000;
 
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
-app.use(cookieParser())
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(cookieParser());
+const corConfig = {
+  origin: process.env.CORS_CONFIG,
+  credentials: true,
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  optionsSuccessStatus: 200,
+};
 
-route(app)
+app.use(cors(corConfig));
 
-const db = require('./config/db')
+route(app);
+
+const db = require("./config/db");
 db.connect();
 
 app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
-})
+  console.log(`Example app listening on port ${port}`);
+});
 
 module.exports = app;

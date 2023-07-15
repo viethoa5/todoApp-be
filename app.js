@@ -22,8 +22,12 @@ app.use(cors(corConfig));
 
 route(app);
 
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger.json');
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 const db = require("./config/db");
 db.connect();
+
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);

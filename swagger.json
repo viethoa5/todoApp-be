@@ -1,0 +1,425 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API Todo App",
+    "version": "2.0.0-oas3-oas3"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8000",
+      "description": "Development server"
+    },
+    {
+      "url": "https://todoapp-fl6f.onrender.com",
+      "description": "Production server"
+    }
+  ],
+  "tags": [
+    {
+      "name": "auth",
+      "description": "Everything about authentication"
+    },
+    {
+      "name": "tasks",
+      "description": "Everything about tasks"
+    }
+  ],
+  "paths": {
+    "/login": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Login api",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/login_body"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successfull Login",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Auth"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "500 response"
+          }
+        }
+      }
+    },
+    "/register": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Register api",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/register_body"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successfull Register",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "500 response"
+          },
+          "503": {
+            "description": "503 response"
+          }
+        }
+      }
+    },
+    "/refresh": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Register api",
+        "responses": {
+          "200": {
+            "description": "Successfull Register",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Auth"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "500 response"
+          },
+          "503": {
+            "description": "503 response"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/tasks": {
+      "get": {
+        "tags": ["tasks"],
+        "summary": "Get list of tasks",
+        "parameters": [
+          {
+            "name": "content",
+            "in": "query",
+            "description": "Word need to include in content task",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfull Get List",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Task"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "500 response"
+          },
+          "503": {
+            "description": "503 response"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/tasks/{id}": {
+      "get": {
+        "tags": ["tasks"],
+        "summary": "Get task by Id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of task need to get",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfull Get task",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Task"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "500 response"
+          },
+          "503": {
+            "description": "500 response"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "put": {
+        "tags": ["tasks"],
+        "summary": "Update task by Id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of task need to update",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfull Update task",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Task"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "500 response"
+          },
+          "503": {
+            "description": "503 response"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": ["tasks"],
+        "summary": "Delete task by Id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Id of task need to delete",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfull Delete task"
+          },
+          "500": {
+            "description": "500 response"
+          },
+          "503": {
+            "description": "503 response"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/tasks/create": {
+      "post": {
+        "tags": ["tasks"],
+        "summary": "Create task",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/tasks_create_body"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successfull Create",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Task"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "500 response"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "kbab"
+          },
+          "isAdmin": {
+            "type": "boolean",
+            "example": false
+          },
+          "name": {
+            "type": "string",
+            "example": "hage"
+          },
+          "password": {
+            "type": "string",
+            "example": "1234"
+          },
+          "email": {
+            "type": "string",
+            "example": "viethoa5555@gmail.com"
+          }
+        }
+      },
+      "Task": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "kbab"
+          },
+          "content": {
+            "type": "string",
+            "example": "hage"
+          },
+          "userId": {
+            "type": "string",
+            "example": "kbab"
+          },
+          "status": {
+            "type": "string",
+            "example": "kbab"
+          }
+        }
+      },
+      "Auth": {
+        "type": "object",
+        "properties": {
+          "access_token": {
+            "type": "string",
+            "example": "kbab"
+          },
+          "refresh_token": {
+            "type": "string",
+            "example": "hage"
+          }
+        }
+      },
+      "login_body": {
+        "required": ["email", "password"],
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "register_body": {
+        "required": ["email", "password"],
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "tasks_create_body": {
+        "required": ["content", "status"],
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

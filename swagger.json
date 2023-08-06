@@ -208,6 +208,16 @@
       "put": {
         "tags": ["tasks"],
         "summary": "Update task by Id",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/tasks_create_body"
+              }
+            }
+          },
+          "required": true
+        },
         "parameters": [
           {
             "name": "id",

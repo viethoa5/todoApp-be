@@ -6,7 +6,7 @@
   "scripts": {
     "build": "babel app.js -d dist",
     "start": "npm run build && nodemon dist/app.js",
-    "dev": "nodemon app.js",
+    "dev": "nodemon src/app.js",
     "test": "mocha --timeout 10000"
   },
   "dependencies": {

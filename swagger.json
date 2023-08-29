@@ -12,6 +12,14 @@
     {
       "url": "https://todoapp-fl6f.onrender.com",
       "description": "Production server"
+    },
+    {
+      "url": "http://0.0.0.0:8000",
+      "description": "Docker ubuntu server"
+    },
+    {
+      "url": "http://0.0.0.0:3000",
+      "description": "Development ubuntu server"
     }
   ],
   "tags": [

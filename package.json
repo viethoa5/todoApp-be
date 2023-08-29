@@ -4,7 +4,7 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "build": "babel app.js -d dist",
+    "build": "babel src/ -d dist",
     "start": "npm run build && nodemon dist/app.js",
     "dev": "nodemon src/app.js",
     "test": "mocha --timeout 10000"
@@ -25,6 +25,8 @@
     "mocha": "^10.2.0",
     "mongoose": "^7.3.2",
     "multer": "^1.4.5-lts.1",
+    "nanoid": "^3.3.6",
+    "nodemailer": "^6.9.4",
     "nodemon": "^2.0.22",
     "swagger-ui-express": "^5.0.0"
   },

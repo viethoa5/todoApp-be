@@ -11,4 +11,5 @@ router.get('/', (req, res) => {
 })
 router.post('/register', upload.none(), authController.register)
 router.post('/refresh', upload.none(), authController.refresh)
+router.post('/reset-password', upload.none(), authController.requestRefresh)
 module.exports = router;

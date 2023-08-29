@@ -99,6 +99,14 @@ class AuthController {
       res.status(401).json({ message: err.message });
     }
   }
+  async requestRefresh(req, res) {
+     const email = req.body.email;
+     const linkReset = await authMethod.getResetPasswordLink(email);
+     res.json(linkReset);
+  }
+  async refreshPassword(req, res) {
+
+  }
 }
 
 module.exports = new AuthController();

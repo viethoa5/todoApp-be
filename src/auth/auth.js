@@ -1,7 +1,9 @@
 var jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 var User = require("../models/user");
-
+const Token = require("../models/token");
+var { nanoid } = require("nanoid");
+const sendEmail = require("../config/sendEmail")
 require("dotenv").config();
 
 exports.generateToken = async function (
@@ -58,4 +60,32 @@ exports.hashPassword = async function (password) {
   } catch (error) {
     return -1;
   }
+}
+
+exports.getResetPasswordLink = async function (email) {
+  const user = await User.findOne({email: email});
+  if (!user) {
+    throw new Error ("EMail don't exist")
+  }
+  let token = await Token.findOne({userId : user._id});
+  let resetToken = nanoid(64);
+  const hash = await bcrypt.hash(resetToken, parseInt(process.env.SECRET_NUMBER));
+  if (token) {
+    token.token = hash;
+    token.createdAt = Date.now();
+  } else {
+    token = await new Token({
+      userId: user._id,
+      token: hash,
+      createdAt: Date.now(),
+    });
+  }
+  token.save();
+  const link = `${process.env.CORS_CONFIG}/passwordReset?token=${resetToken}&id=${user._id}`;
+  if (user.name !== undefined) {
+    await sendEmail(user.email,"Password Reset Request", user.name, link);
+  } else {
+    await sendEmail(user.email,"Password Reset Request", '', link);
+  }
+  return link;
 }

@@ -34,7 +34,6 @@ class TaskController {
 
   async update(req, res, next) {
     try {
-      console.log(req.body)
       const taskUpdated = await Task.findOneAndUpdate(
         {
           userId: req.user._id,
